@@ -1,5 +1,5 @@
 {
-  "versionName": "1.0.5",
-  "versionCode": "6"
+  "versionName": "1.0.6",
+  "versionCode": "6",
+  "info": "加入更新检查"
 }
- 

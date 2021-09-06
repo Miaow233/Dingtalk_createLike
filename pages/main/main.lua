@@ -50,7 +50,6 @@ button.onClick=function()
   if Count == nil return end
   TotalCount = TotalCount + Count
   base_url = "https://lv.dingtalk.com/interaction/createLike?uuid=" .. Uuid .. "&count=" .. Count
-  --print(base_url)
   Http.get(base_url,function(_, body)
     if body:find("success")
       弹窗("成功(。>△<)")
@@ -102,8 +101,8 @@ function getCount()
   if text == "" then
     弹窗("请输入数量")
     return
-   elseif tonumber(text) < 0 or tonumber(text) > 10000000 then
-    弹窗("数量应在0 ~ 10000000之间")
+   elseif tonumber(text) < 0 or tonumber(text) > 1000000 then
+    弹窗("数量应在0 ~ 1000000之间")
     return
    else
     return text
@@ -170,10 +169,39 @@ function autoGetUuid()
 
 end
 
---import "androidx.documentfile.provider.DocumentFile"
---import "android.net.Uri"
---documentFile = DocumentFile.fromTreeUri(context, Uri.parse("/sdcard/Android/data"));
---changeToUri3方法是我封装好的方法，后面会用到，这个是通过path生成指定可解析URI的方法
+--检查更新
+function checkUpdate()
+  print("正在检查更新")
+  Http.get("https://github.com/Miaow233/Dingtalk_createLike/raw/main/latest.txt",function(code,body)
+    if code == 200 then
+      local json = require "json"
+      local data = json.decode(body)
+      local newName = data["versionName"]
+      local newCode = data["versionCode"]
+      if this.getPackageManager().getPackageInfo(this.getPackageName(),64).versionCode ~= tonumber(newCode) then
+        local parent=UiManager.coordinatorLayout
+        local duration=Snackbar.LENGTH_SHORT
+        import "androidx.appcompat.app.AlertDialog"
+        AlertDialog.Builder(this)
+        .setTitle("更新")
+        .setMessage("检查到新版本：" .. newName)
+        .setNegativeButton("取消",null)
+        .setPositiveButton("获取更新",function()
+        activity.newActivity("update")
+        end)
+        --.setCancelable(false)
+        .create()
+        .show()
+       else
+        弹窗("已是最新版本")
+      end
+     else
+      print("检查更新失败")
+    end
+  end)
+end
+
+checkUpdate()
 
 import "android.Manifest"
 import "androidx.core.content.PermissionChecker"
@@ -188,3 +216,4 @@ end
 if Build.VERSION.SDK_INT >= 30 then
   print("此应用在安卓10以上版本可能无法正常工作，请悉知")
 end
+
