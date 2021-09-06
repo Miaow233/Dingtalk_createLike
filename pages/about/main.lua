@@ -15,6 +15,9 @@ import "com.google.android.material.textfield.TextInputEditText"
 import "android.graphics.Color"
 import "net.fusionapp.core.ui.adapter.BasePagerAdapter"
 
+Uri=luajava.bindClass("android.net.Uri")
+Intent=luajava.bindClass("android.content.Intent")
+
 --导入layout布局
 import "layout"
 
@@ -56,9 +59,11 @@ changelog.text=[[1.0.4
 
 --设置按钮事件，弹出Snackbar
 button.onClick=function()
-  local File=luajava.bindClass("java.io.File")
-  local Uri=luajava.bindClass("android.net.Uri")
-  local Intent=luajava.bindClass("android.content.Intent")
   local s = "mqqwpa://im/chat?chat_type=wpa&uin=1293865264"
+  activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(s)))
+end
+
+join.onClick=function()
+  local s = "mqqapi://card/show_pslcard?src_type=internal&version=1&uin=164725525&card_type=group&source=qrcode"
   activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(s)))
 end

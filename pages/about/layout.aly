@@ -39,10 +39,23 @@
         },
       },
     }, 
-    {MaterialButton,
-      id="button",
-      text="提交Bug",
-      layout_gravity="center"
+   {RelativeLayout,
+      layout_width="wrap",
+      {MaterialButton,
+        id="join",
+        text="进群唠嗑",
+        layout_width="wrap",
+        layout_alignParentCenter="true",
+        layout_marginLeft="24dp",
+      },
+      {MaterialButton,
+        id="button",
+        text="错误报告",
+        layout_width="wrap",
+        layout_alignParentRight="true",
+        layout_marginRight="24dp",
+      },
     },
+ 
   }
 }

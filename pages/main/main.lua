@@ -22,12 +22,10 @@ local list=ArrayList()
 list.add(loadlayout(layout))
 viewPager.setAdapter(BasePagerAdapter(list))
 
-
 --设置卡片标题
 title.text="钉钉点赞 by Miaow"
 
 --设置卡片内容
-poem = ""
 Http.get("https://v1.jinrishici.com/all.txt",function(_, body)
   local messageBuilder=StringBuilder()
   messageBuilder.append("1.第一次启动请授予储存权限\n")
@@ -37,8 +35,6 @@ Http.get("https://v1.jinrishici.com/all.txt",function(_, body)
   if body ~= "" then messageBuilder.append("\n\n" .. body:gsub("\n","")) end
   message.text=tostring(messageBuilder)
 end)
-
-
 
 --设置按钮事件
 button_get_uuid.onClick=function()
@@ -67,6 +63,9 @@ end
 
 --侧滑栏点击事件
 local functions={}
+functions["常见问题"]=function()
+  activity.newActivity("faq")
+end
 functions["关于"]=function()
   activity.newActivity("about")
 end
@@ -159,8 +158,8 @@ function 弹窗(text)
   .show()
 end
 
+--尝试自动获取UUID
 function autoGetUuid()
-  --尝试自动获取UUID
   Uuid = getUuidFromLog()
   if Uuid == nil or Uuid == "" then
     弹窗("获取UUID失败，请手动填写")
