@@ -172,12 +172,14 @@ end
 --检查更新
 function checkUpdate()
   print("正在检查更新")
-  Http.get("https://github.com/Miaow233/Dingtalk_createLike/raw/main/latest.txt",function(code,body)
+  Http.get("https://raw.fastgit.org/Miaow233/Dingtalk_createLike/main/latest.txt",function(code,body)
     if code == 200 then
       local json = require "json"
       local data = json.decode(body)
       local newName = data["versionName"]
       local newCode = data["versionCode"]
+      local url = data["url"]
+      --local url = "https://nekohouse.cafe/#/about"
       if this.getPackageManager().getPackageInfo(this.getPackageName(),64).versionCode ~= tonumber(newCode) then
         local parent=UiManager.coordinatorLayout
         local duration=Snackbar.LENGTH_SHORT
@@ -187,7 +189,12 @@ function checkUpdate()
         .setMessage("检查到新版本：" .. newName)
         .setNegativeButton("取消",null)
         .setPositiveButton("获取更新",function()
-        activity.newActivity("update")
+          --创建一个bundle，用于传递参数
+          --如果没有参数，则不要传递bundle
+          local Bundle = luajava.bindClass "android.os.Bundle"
+          local bundle=Bundle()
+          bundle.putString("key",url)
+          activity.startFusionActivity("update",bundle)
         end)
         --.setCancelable(false)
         .create()

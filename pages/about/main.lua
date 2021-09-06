@@ -32,7 +32,10 @@ messageBuilder.append("3.本应用使用Fusion制作，源码已开源至Github"
 message.text=tostring(messageBuilder)
 
 title.text="更新日志"
-changelog.text=[[1.0.6
+changelog.text=[[1.0.7
+修改更新地址
+
+1.0.6
 加入检查更新
 
 1.0.5
