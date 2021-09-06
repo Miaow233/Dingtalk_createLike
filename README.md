@@ -8,7 +8,7 @@
 1. 支持手机端无抓包自动获取直播间UUID，通过读取log文件实现
 2. 可自定义点赞数量
 
-![screenshot](https://cdn.jsdelivr.net/gh/Miaow233/Dingtalk_createLike/screenshot.png)
+![screenshot](screenshot.png)
 
 ## Todo
 - 
