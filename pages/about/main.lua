@@ -9,8 +9,8 @@ import "com.google.android.material.textfield.TextInputEditText"
 import "android.graphics.Color"
 import "net.fusionapp.core.ui.adapter.BasePagerAdapter"
 
-Uri=luajava.bindClass("android.net.Uri")
-Intent=luajava.bindClass("android.content.Intent")
+Uri = luajava.bindClass("android.net.Uri")
+Intent = luajava.bindClass("android.content.Intent")
 
 --导入layout布局
 import "layout"
@@ -28,7 +28,7 @@ viewPager.setAdapter(BasePagerAdapter(list))
 local messageBuilder=StringBuilder()
 messageBuilder.append("1.上网课时无聊写出来的小玩具\n")
 messageBuilder.append("2.相比其它刷赞手段，最大特点就是可以自动获取UUID了\n")
-messageBuilder.append("3.本应用使用Fusion制作，源码已开源至Github")
+messageBuilder.append("3.本应用使用Fusion制作，已开源至Github")
 message.text=tostring(messageBuilder)
 
 title.text="更新日志"
