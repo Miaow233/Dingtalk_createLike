@@ -11,9 +11,9 @@
 ![screenshot](screenshot.png)
 
 ## Todo
-- [x] 检查更新
-- [x] 使用限制
-- [x] 使用java开发
+- [X] 检查更新
+- [ ] 使用限制
+- [ ] 使用java开发
 
 ## 开发
 下载安装FusionApp 2.x版本
