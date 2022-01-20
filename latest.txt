@@ -1,6 +1,0 @@
-{
-  "versionName": "1.0.7",
-  "versionCode": "7",
-  "url": "https://hub.fastgit.org/Miaow233/Dingtalk_createLike/releases",
-  "info": "修改更新地址"
-}

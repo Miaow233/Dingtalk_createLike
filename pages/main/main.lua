@@ -47,17 +47,35 @@ button.onClick=function()
   local Uuid = getUuid()
   if Uuid == nil then return end
   local Count = getCount()
-  if Count == nil return end
-  TotalCount = TotalCount + Count
-  base_url = "https://lv.dingtalk.com/interaction/createLike?uuid=" .. Uuid .. "&count=" .. Count
-  Http.get(base_url,function(_, body)
+  if Count == nil
+    return
+   else
+    remains = math.floor(Count % 100)
+    times = math.floor(Count/100)
+  end
+  import "http"
+  base_url = "https://lv.dingtalk.com/interaction/createLike?uuid=" .. Uuid .. "&count="
+  s_times = 0
+  function post(num)
+    body = http.get(base_url .. tostring(num))
     if body:find("success")
-      弹窗("成功(。>△<)")
-      button.text = "GKD " .. TotalCount
-     else
-      弹窗("失败惹(っ△<。)")
+      TotalCount = TotalCount + num
+      s_times = s_times + 1
     end
-  end)
+  end
+  if times ~= 0 then
+    for i=1, times do
+      post(100)
+    end
+  end
+  if remains ~= 0 then post(tonumber(remains)) end
+  --print(times, remains)
+  --print(Count, s_times, TotalCount)
+
+  if s_times ~= 0 then
+     弹窗("成功")
+     button.text = "GKD " .. TotalCount
+   end
 end
 
 --侧滑栏点击事件
@@ -101,8 +119,8 @@ function getCount()
   if text == "" then
     弹窗("请输入数量")
     return
-   elseif tonumber(text) < 0 or tonumber(text) > 1000000 then
-    弹窗("数量应在0 ~ 1000000之间")
+   elseif tonumber(text) < 0 or tonumber(text) > 1000 then
+    弹窗("数量应在0 ~ 1000之间")
     return
    else
     return text
@@ -168,47 +186,6 @@ function autoGetUuid()
   end
 
 end
-
---检查更新
-function checkUpdate()
-  print("正在检查更新")
-  Http.get("https://raw.fastgit.org/Miaow233/Dingtalk_createLike/main/latest.txt",function(code,body)
-    if code == 200 then
-      local json = require "json"
-      local data = json.decode(body)
-      local newName = data["versionName"]
-      local newCode = data["versionCode"]
-      local url = data["url"]
-      --local url = "https://nekohouse.cafe/#/about"
-      if this.getPackageManager().getPackageInfo(this.getPackageName(),64).versionCode ~= tonumber(newCode) then
-        local parent=UiManager.coordinatorLayout
-        local duration=Snackbar.LENGTH_SHORT
-        import "androidx.appcompat.app.AlertDialog"
-        AlertDialog.Builder(this)
-        .setTitle("更新")
-        .setMessage("检查到新版本：" .. newName)
-        .setNegativeButton("取消",null)
-        .setPositiveButton("获取更新",function()
-          --创建一个bundle，用于传递参数
-          --如果没有参数，则不要传递bundle
-          local Bundle = luajava.bindClass "android.os.Bundle"
-          local bundle=Bundle()
-          bundle.putString("key",url)
-          activity.startFusionActivity("update",bundle)
-        end)
-        --.setCancelable(false)
-        .create()
-        .show()
-       else
-        弹窗("已是最新版本")
-      end
-     else
-      print("检查更新失败")
-    end
-  end)
-end
-
-checkUpdate()
 
 import "android.Manifest"
 import "androidx.core.content.PermissionChecker"

@@ -32,7 +32,12 @@ messageBuilder.append("3.本应用使用Fusion制作，已开源至Github")
 message.text=tostring(messageBuilder)
 
 title.text="更新日志"
-changelog.text=[[1.0.7
+changelog.text=[[1.0.8
+修复刷赞无效的问题
+调整刷赞限制
+更换更新方式
+
+1.0.7
 修改更新地址
 
 1.0.6
@@ -58,12 +63,55 @@ changelog.text=[[1.0.7
 1.0.0
 第一版]]
 
-reportBugs.onClick=function()
-  local s = "mqqwpa://im/chat?chat_type=wpa&uin=1293865264"
+joinGroup.onClick = function()
+  local s = "mqqapi://card/show_pslcard?src_type=internal&version=1&uin=164725525&card_type=group&source=qrcode"
   activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(s)))
 end
 
-joinGroup.onClick=function()
-  local s = "mqqapi://card/show_pslcard?src_type=internal&version=1&uin=164725525&card_type=group&source=qrcode"
+checkUpdate.onClick = function()
+  --检查更新
+  print("正在检查更新")
+  Http.get("https://raw.fastgit.org/Miaow233/Dingtalk_createLike/main/latest.txt",function(code,body)
+    if code == 200 then
+      local json = require "json"
+      local data = json.decode(body)
+      local newName = data["versionName"]
+      local newCode = data["versionCode"]
+      local url = data["url"]
+      if this.getPackageManager().getPackageInfo(this.getPackageName(),64).versionCode ~= tonumber(newCode) then
+        local parent=UiManager.coordinatorLayout
+        local duration=Snackbar.LENGTH_SHORT
+        import "androidx.appcompat.app.AlertDialog"
+        AlertDialog.Builder(this)
+        .setTitle("更新")
+        .setMessage("检查到新版本：" .. newName)
+        .setNegativeButton("取消",null)
+        .setPositiveButton("加群获取更新",function()
+          local s = "mqqapi://card/show_pslcard?src_type=internal&version=1&uin=164725525&card_type=group&source=qrcode"
+          activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(s)))
+        end)
+        --[[
+        .setPositiveButton("获取更新",function()
+          --创建一个bundle，用于传递参数
+          --如果没有参数，则不要传递bundle
+          local Bundle = luajava.bindClass "android.os.Bundle"
+          local bundle=Bundle()
+          bundle.putString("key",url)
+          activity.startFusionActivity("update", bundle)
+        end)]]
+        --.setCancelable(false)
+        .create()
+        .show()
+       else
+        弹窗("已是最新版本")
+      end
+     else
+      print("检查更新失败")
+    end
+  end)
+end
+
+reportBugs.onClick = function()
+  local s = "mqqwpa://im/chat?chat_type=wpa&uin=1293865264"
   activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(s)))
 end
