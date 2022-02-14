@@ -32,7 +32,10 @@ messageBuilder.append("3.本应用使用Fusion制作，已开源至Github")
 message.text=tostring(messageBuilder)
 
 title.text="更新日志"
-changelog.text=[[1.0.8
+changelog.text=[[1.0.9 - α
+修复找不到 http 模块的问题
+
+1.0.8
 修复刷赞无效的问题
 调整刷赞限制
 更换更新方式
