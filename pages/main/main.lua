@@ -69,8 +69,6 @@ button.onClick=function()
     end
   end
   if remains ~= 0 then post(tonumber(remains)) end
-  --print(times, remains)
-  --print(Count, s_times, TotalCount)
 
   if s_times ~= 0 then
      弹窗("成功")
@@ -88,12 +86,9 @@ functions["关于"]=function()
 end
 --注册点击事件，如无其它需求，不用扩展写
 function onDrawerListItemClick(data, recyclerView, listIndex, itemIndex)
-  --侧滑栏列表的数据是二维结构，所以需要先获取到点击项目所在列表的数据
-  local listData = data.get(listIndex);
-  --获取到所在列表的数据后获取点击项目的数据
-  local itemData = listData.get(itemIndex);
-  --最后获取到点击的项目的标题
-  local title = itemData.getTitle();
+  local listData = data.get(listIndex)
+  local itemData = listData.get(itemIndex)
+  local title = itemData.getTitle()
   local event=functions[title]
   if(event~=nil)then
     event()
@@ -127,23 +122,25 @@ function getCount()
   end
 end
 
+--命令执行函数
+function exec(cmd)
+  local p=io.popen(string.format('%s',cmd))
+  local s=p:read("*a")
+  p:close()
+  return s
+end
+
+--获取文件夹下最新文件路径
+function getNewestFile(path)
+  list = exec("ls " .. path)
+  return path .."/".. list:sub(-18,-2)
+end
+
 --从日志文件获取UUID
 function getUuidFromLog()
   local path = "/storage/emulated/0/Android/data/com.alibaba.android.rimet/files/logs"
-  local function exec(cmd)
-    local p=io.popen(string.format('%s',cmd))
-    local s=p:read("*a")
-    p:close()
-    return s
-  end
-
-  local function getNewestFile(path)
-    list = exec("ls " .. path)
-    return list:sub(-18,-2)
-  end
-
   local function getUserUid()
-    for c in io.lines(path .. "/lwp_sdk/" .. getNewestFile(path .. "/lwp_sdk")) do
+    for c in io.lines(getNewestFile(path .. "/lwp_sdk")) do
       if c:find("k_cookie")
         return c:match("k_cookie(.+)@dingding"):gsub("_","")
       end
@@ -162,6 +159,19 @@ function getUuidFromLog()
   end
   return list[#list]
 end
+
+--从缓存数据获取UUID
+function getUuidFromCache()
+  local path = "/storage/emulated/0/Android/data/com.alibaba.android.rimet/files/holmes/trace/assigndetective"
+  local function getUserUid()
+    for c in io.lines(getNewestFile(path)) do
+      if c:find("launch_player url")
+        uuid= c:match("dingtalk.com/live_hp/(.+)_merge.m3u8")
+      end
+    end
+    return uuid
+end
+
 
 --弹窗函数
 function 弹窗(text)
