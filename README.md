@@ -1,3 +1,5 @@
+# 由于点赞接口限制，功能暂时失效
+
 # Dingtalk_createLike 
 
 [![QQ Group](https://img.shields.io/badge/QQ%20Group-164725525-12B7F5?logo=tencent-qq)](https://jq.qq.com/?_wv=1027&k=OuhCQlwI)
